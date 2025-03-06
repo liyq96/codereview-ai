@@ -4,6 +4,7 @@ go 1.22.5
 
 require (
 	github.com/gin-gonic/gin v1.10.0
+	github.com/sashabaranov/go-openai v1.38.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/liyq96/codereview-ai/internal/config"
 	"github.com/liyq96/codereview-ai/internal/service"
 	response "github.com/liyq96/codereview-ai/pkg/utils/resposne"
 )
@@ -17,5 +18,6 @@ func NewCodeReviewHandler(codeReviewService *service.CodeReviewService) *CodeRev
 func (h *CodeReviewHandler) SubmitCodeReview(c *gin.Context) {
 	// TODO code review logic
 	resp := "代码审查完成"
+	h.codeReviewService.SubmitCodeReview("code", &config.SystemConfig{})
 	response.Success(resp)
 }
