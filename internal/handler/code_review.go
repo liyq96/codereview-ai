@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/liyq96/codereview-ai/internal/config"
 	"github.com/liyq96/codereview-ai/internal/service"
@@ -16,8 +18,17 @@ func NewCodeReviewHandler(codeReviewService *service.CodeReviewService) *CodeRev
 }
 
 func (h *CodeReviewHandler) SubmitCodeReview(c *gin.Context) {
-	// TODO code review logic
-	resp := "代码审查完成"
-	h.codeReviewService.SubmitCodeReview("code", &config.SystemConfig{})
-	response.Success(resp)
+	var data map[string]any
+	err := c.ShouldBindJSON(&data)
+	if err != nil {
+		response.Error(400, "参数错误")
+		return
+	}
+	code, ok := data["code_content"].(string)
+	if !ok {
+		response.Error(400, "参数错误")
+	}
+	fmt.Println("code_content:", code)
+	go h.codeReviewService.SubmitCodeReview(code, &config.SystemConfig{})
+	response.Success("")
 }
