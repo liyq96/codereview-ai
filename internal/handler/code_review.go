@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/liyq96/codereview-ai/internal/config"
 	"github.com/liyq96/codereview-ai/internal/service"
 	response "github.com/liyq96/codereview-ai/pkg/utils/resposne"
 )
@@ -29,6 +28,6 @@ func (h *CodeReviewHandler) SubmitCodeReview(c *gin.Context) {
 		response.Error(400, "参数错误")
 	}
 	fmt.Println("code_content:", code)
-	go h.codeReviewService.SubmitCodeReview(code, &config.SystemConfig{})
+	go h.codeReviewService.SubmitCodeReview(code)
 	response.Success("")
 }

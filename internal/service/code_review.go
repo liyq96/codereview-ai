@@ -10,20 +10,21 @@ import (
 	openai "github.com/sashabaranov/go-openai"
 )
 
-type CodeReviewService struct{}
-
-func NewCodeReviewService() *CodeReviewService {
-	return &CodeReviewService{}
+type CodeReviewService struct {
+	cfg *config.SystemConfig
 }
 
-func (s *CodeReviewService) SubmitCodeReview(code string, cfg *config.SystemConfig) {
-	config := openai.DefaultConfig("")
-	config.BaseURL = "https://ark.cn-beijing.volces.com/api/v3"
-	fmt.Println("config.BaseURL", config.BaseURL)
+func NewCodeReviewService(cfg *config.SystemConfig) *CodeReviewService {
+	return &CodeReviewService{cfg: cfg}
+}
+
+func (s *CodeReviewService) SubmitCodeReview(code string) {
+	config := openai.DefaultConfig(s.cfg.Ai.ApiKey)
+	config.BaseURL = s.cfg.Ai.BaseUrl
 	client := openai.NewClientWithConfig(config)
 
 	// 解析提示词文档
-	prompt, err := ReadMarkdownFile("doc/system_prompt.md")
+	prompt, err := ReadMarkdownFile(s.cfg.Ai.PromptFilePath)
 	if err != nil {
 		fmt.Printf("ReadMarkdownFile error: %v\n", err)
 		prompt = "请帮我审查一下这段代码，看看有没有问题。"
@@ -32,7 +33,7 @@ func (s *CodeReviewService) SubmitCodeReview(code string, cfg *config.SystemConf
 	resp, err := client.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
-			Model: "deepseek-r1-distill-qwen-32b-250120",
+			Model: s.cfg.Ai.ModelId,
 			Messages: []openai.ChatCompletionMessage{
 				{
 					Role:    openai.ChatMessageRoleSystem,

@@ -28,7 +28,7 @@ func LoadConfig(path string) (*config.SystemConfig, error) {
 	return cfg, nil
 }
 
-func setupRouter() *gin.Engine {
+func setupRouter(cfg *config.SystemConfig) *gin.Engine {
 	r := gin.Default()
 
 	// 错误处理中间件
@@ -47,7 +47,7 @@ func setupRouter() *gin.Engine {
 	apiV1 := r.Group("/v1")
 	{
 		// 初始化服务和handler
-		services := service.InitServices()
+		services := service.InitServices(cfg)
 		handlers := handler.InitHandlers(services)
 
 		// 注册路由
@@ -81,7 +81,7 @@ func main() {
 	gin.SetMode(cfg.Server.Mode)
 
 	// 初始化路由
-	router := setupRouter()
+	router := setupRouter(cfg)
 
 	// 启动服务器
 	if err := startServer(cfg, router); err != nil {

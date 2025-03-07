@@ -13,9 +13,10 @@ type ServerConfig struct {
 }
 
 type AiConfig struct {
-	BaseUrl string `yaml:"base_url"`
-	ApiKey  string `yaml:"api_key"`
-	ModelId string `yaml:"model_id"`
+	BaseUrl        string `yaml:"base_url"`
+	ApiKey         string `yaml:"api_key"`
+	ModelId        string `yaml:"model_id"`
+	PromptFilePath string `yaml:"prompt_file_path"`
 }
 
 type SystemConfig struct {
