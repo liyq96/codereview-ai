@@ -27,7 +27,7 @@ func (s *CodeReviewService) SubmitCodeReview(code string) {
 	prompt, err := ReadMarkdownFile(s.cfg.Ai.PromptFilePath)
 	if err != nil {
 		fmt.Printf("ReadMarkdownFile error: %v\n", err)
-		prompt = "请帮我审查一下这段代码，看看有没有问题。"
+		prompt = "请帮我审查一下这段代码，依照markdown的格式回复建议，按照下面的分类分别给出改进意见。\n\n # 必要的改进内容 \n\n 可以选择优化的内容 \n\n 风格建议"
 	}
 	fmt.Println("----- standard request -----")
 	resp, err := client.CreateChatCompletion(
